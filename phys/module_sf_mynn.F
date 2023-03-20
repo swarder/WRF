@@ -633,7 +633,7 @@ CONTAINS
              IF (COARE_OPT .EQ. 3.0) THEN
                 !COARE 3.0 (MISLEADING SUBROUTINE NAME)
                 CALL charnock_1955(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
-                print "(i6)", I
+                PRINT *, I
              ELSE
                 !COARE 3.5
                 CALL edson_etal_2013(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
