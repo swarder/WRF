@@ -10,17 +10,17 @@ MODULE module_sf_mynn
 !1) Calculation of stability parameter (z/L) taken from Li et al. (2010 BLM)
 !   for first iteration of first time step; afterwards, exact calculation
 !   using a brute force iterative method described in Olson et al. (2021 NOAA
-!   Tech memorandum). This method replaces the iterative technique used in 
+!   Tech memorandum). This method replaces the iterative technique used in
 !   module_sf_sfclayrev.F (Jimenez et al. 2013) with mods. Either technique
 !   gives about the same result. The former technique is retained in this
 !   module (commented out) for potential subsequent benchmarking.
 !2) Fixed isflux=0 option to turn off scalar fluxes, but keep momentum
 !   fluxes for idealized studies (credit: Anna Fitch).
 !3) Kinematic viscosity varies with temperature according to Andreas (1989).
-!4) Uses the blended Monin-Obukhov flux-profile relationships COARE (Fairall 
+!4) Uses the blended Monin-Obukhov flux-profile relationships COARE (Fairall
 !   et al 2003) for the unstable regime (a blended mix of Dyer-Hicks 1974 and
 !   Grachev et al (2000). Uses Cheng and Brutsaert (2005) for stable conditions.
-!5) The following overviews the namelist variables that control the 
+!5) The following overviews the namelist variables that control the
 !   aerodynamic roughness lengths (over water) and the thermal and moisture
 !   roughness lengths (defaults are recommended):
 !
@@ -43,7 +43,7 @@ MODULE module_sf_mynn
 !   SNOW/ICE only:
 !   Andreas (2002) snow/ice parameterization for thermal and
 !   moisture roughness is used over all gridpoints with snow deeper than
-!   0.1 m. This algorithm calculates a z0 for snow (Andreas et al. 2005, BLM), 
+!   0.1 m. This algorithm calculates a z0 for snow (Andreas et al. 2005, BLM),
 !   which is only used as part of the thermal and moisture roughness
 !   length calculation, not to directly impact the surface winds.
 !
@@ -54,7 +54,7 @@ MODULE module_sf_mynn
 !
 !2) Option to activate stochastic parameter perturbations (SPP), which
 !   perturb z0, zt, and zq, along with many other parameters in the MYNN-
-!   EDMF scheme. 
+!   EDMF scheme.
 !
 !NOTE: This code was primarily tested in combination with the RUC LSM.
 !      Performance with the Noah (or other) LSM is relatively unknown.
@@ -78,7 +78,7 @@ MODULE module_sf_mynn
 !   REAL    , PARAMETER :: p1000mb      = 100000.
 !   REAL    , PARAMETER :: EP_2         = r_d/r_v
 
-  REAL, PARAMETER :: ep_3=1.-ep_2 
+  REAL, PARAMETER :: ep_3=1.-ep_2
   REAL, PARAMETER :: wmin=0.1    ! Minimum wind speed
   REAL, PARAMETER :: VCONVC=1.25
   REAL, PARAMETER :: SNOWZ0=0.011
@@ -103,7 +103,7 @@ CONTAINS
     !Fill the PSIM and PSIH tables. This code was leveraged from
     !module_sf_sfclayrev.F, leveraging the work from Pedro Jimenez.
     !This subroutine returns a blended form from Dyer and Hicks (1974)
-    !and Grachev et al (2000) for unstable conditions and the form 
+    !and Grachev et al (2000) for unstable conditions and the form
     !from Cheng and Brutsaert (2005) for stable conditions.
 
      CALL psi_init(psi_opt)
@@ -133,7 +133,7 @@ CONTAINS
 !-- T3D         3D temperature (K)
 !-- QV3D        3D water vapor mixing ratio (Kg/Kg)
 !-- P3D         3D pressure (Pa)
-!-- RHO3D       3D density (kg/m3) 
+!-- RHO3D       3D density (kg/m3)
 !-- dz8w        3D dz between full levels (m)
 !-- CP          heat capacity at constant pressure for dry air (J/kg/K)
 !-- G           acceleration due to gravity (m/s^2)
@@ -171,7 +171,7 @@ CONTAINS
 !-- T2          diagnostic 2m temperature (K)
 !-- Q2          diagnostic 2m mixing ratio (kg/kg)
 !-- SNOWH       Snow height (m)
-!-- GZ1OZ0      log((z1+ZNT)/ZNT) where ZNT is roughness length 
+!-- GZ1OZ0      log((z1+ZNT)/ZNT) where ZNT is roughness length
 !-- WSPD        wind speed at lowest model level (m/s)
 !-- BR          bulk Richardson number in surface layer
 !-- ISFFLX      isfflx=1 for surface heat and moisture fluxes
@@ -192,7 +192,7 @@ CONTAINS
 !   (water      =1: z0 from Davis et al (2008), zt & zq from COARE3.0/3.5
 !    only)      =2: z0 from Davis et al (2008), zt & zq from Garratt (1992)
 !               =3: z0 from Taylor and Yelland (2004), zt and zq from COARE 3.0/3.5
-!-- iz0tlnd     =0: Zilitinkevich (1995) with Czil=0.085, 
+!-- iz0tlnd     =0: Zilitinkevich (1995) with Czil=0.085,
 !   (land       =1: Czil_new (modified according to Chen & Zhang 2008)
 !    only)      =2: Modified Yang et al (2002, 2008) - generalized for all landuse
 !               =3: constant zt = z0/7.4 (Garratt 1992)
@@ -470,7 +470,7 @@ CONTAINS
               PSIH2, &    !M-O stability functions at z=2 m
              PSIM10, &    !M-O stability functions at z=10 m
              PSIH10, &    !M-O stability functions at z=10 m
-              WSPDI, & 
+              WSPDI, &
             z_t,z_q, &    !thermal & moisture roughness lengths
            ZNTstoch, &
              GOVRTH, &    !g/theta
@@ -500,12 +500,12 @@ CONTAINS
          ! CONVERT GROUND & LOWEST LAYER TEMPERATURE TO POTENTIAL TEMPERATURE:
          ! PSFC cmb
          PSFC(I)=PSFCPA(I)/1000.
-         THGB(I)=TSK(I)*(100./PSFC(I))**ROVCP   !(K)              
+         THGB(I)=TSK(I)*(100./PSFC(I))**ROVCP   !(K)
          ! PL cmb
-         PL=P1D(I)/1000.                                                   
-         THCON=(100./PL)**ROVCP                                                 
+         PL=P1D(I)/1000.
+         THCON=(100./PL)**ROVCP
          TH1D(I)=T1D(I)*THCON                   !(Theta, K)
-         TC1D(I)=T1D(I)-273.15                  !(T, Celsius)    
+         TC1D(I)=T1D(I)-273.15                  !(T, Celsius)
 
          ! CONVERT TO VIRTUAL TEMPERATURE
          QVSH(I)=QV1D(I)/(1.+QV1D(I))        !CONVERT TO SPEC HUM (kg/kg)
@@ -514,7 +514,7 @@ CONTAINS
          TV1D(I)=T1D(I)*TVCON   !(K)
 
          !RHO1D(I)=PSFCPA(I)/(R*TV1D(I)) !now using value calculated in sfc driver
-         ZA(I)=0.5*dz8w1d(I)             !height of first half-sigma level 
+         ZA(I)=0.5*dz8w1d(I)             !height of first half-sigma level
          ZA2(I)=dz8w1d(I) + 0.5*dz2w1d(I)    !height of 2nd half-sigma level
          GOVRTH(I)=G/TH1D(I)
       ENDDO
@@ -530,9 +530,9 @@ CONTAINS
          ENDIF
          !FOR LAND POINTS, QSFC can come from LSM, ONLY RECOMPUTE OVER WATER
          IF (xland(i).gt.1.5 .or. QSFC(i).le.0.0) THEN   !WATER
-            QSFC(I)=EP2*E1/(PSFC(I)-ep_3*E1)             !specific humidity    
-            QSFCMR(I)=EP2*E1/(PSFC(I)-E1)                !mixing ratio 
-         ELSE                                            !LAND 
+            QSFC(I)=EP2*E1/(PSFC(I)-ep_3*E1)             !specific humidity
+            QSFCMR(I)=EP2*E1/(PSFC(I)-E1)                !mixing ratio
+         ELSE                                            !LAND
             QSFCMR(I)=QSFC(I)/(1.-QSFC(I))
          ENDIF
 
@@ -553,17 +553,17 @@ CONTAINS
       ENDDO
 
       DO I=its,ite
-         WSPD(I)=SQRT(U1D(I)*U1D(I)+V1D(I)*V1D(I))     
+         WSPD(I)=SQRT(U1D(I)*U1D(I)+V1D(I)*V1D(I))
 
-         !TGS:THVGB(I)=THGB(I)*(1.+EP1*QSFC(I)*MAVAIL(I)) 
+         !TGS:THVGB(I)=THGB(I)*(1.+EP1*QSFC(I)*MAVAIL(I))
          THVGB(I)=THGB(I)*(1.+EP1*QSFC(I))
 
          DTHDZ=(TH1D(I)-THGB(I))
          DTHVDZ=(THV1D(I)-THVGB(I))
 
          !--------------------------------------------------------
-         !  Calculate the convective velocity scale (WSTAR) and 
-         !  subgrid-scale velocity (VSGD) following Beljaars (1995, QJRMS) 
+         !  Calculate the convective velocity scale (WSTAR) and
+         !  subgrid-scale velocity (VSGD) following Beljaars (1995, QJRMS)
          !  and Mahrt and Sun (1995, MWR), respectively
          !-------------------------------------------------------
          !  Use Beljaars over land and water
@@ -586,8 +586,8 @@ CONTAINS
          WSPD(I)=MAX(WSPD(I),wmin)
 
          !--------------------------------------------------------
-         ! CALCULATE THE BULK RICHARDSON NUMBER OF SURFACE LAYER, 
-         ! ACCORDING TO AKB(1976), EQ(12). 
+         ! CALCULATE THE BULK RICHARDSON NUMBER OF SURFACE LAYER,
+         ! ACCORDING TO AKB(1976), EQ(12).
          !--------------------------------------------------------
          BR(I)=GOVRTH(I)*ZA(I)*DTHVDZ/(WSPD(I)*WSPD(I))
          IF (ITIMESTEP == 1) THEN
@@ -603,14 +603,14 @@ CONTAINS
          !if (itimestep .GT. 1) THEN
          !    IF(MOL(I).LT.0.)BR(I)=MIN(BR(I),0.0)
          !ENDIF
-     
+
       ENDDO
 
  1006   format(A,F7.3,A,f9.4,A,f9.5,A,f9.4)
  1007   format(A,F2.0,A,f6.2,A,f7.3,A,f7.2)
 
-!--------------------------------------------------------------------      
-!--------------------------------------------------------------------      
+!--------------------------------------------------------------------
+!--------------------------------------------------------------------
 !--- BEGIN I-LOOP
 !--------------------------------------------------------------------
 !--------------------------------------------------------------------
@@ -633,6 +633,7 @@ CONTAINS
              IF (COARE_OPT .EQ. 3.0) THEN
                 !COARE 3.0 (MISLEADING SUBROUTINE NAME)
                 CALL charnock_1955(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
+                print "(i6)", I
              ELSE
                 !COARE 3.5
                 CALL edson_etal_2013(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
@@ -708,7 +709,7 @@ CONTAINS
              CALL fairall_etal_2014(z_t(i),z_q(i),restar,UST(i),visc,rstoch1D(i),spp_pbl)
           ENDIF
        ENDIF
- 
+
     ELSE
 
        ! add stochastic perturbaction of ZNT
@@ -754,35 +755,35 @@ CONTAINS
 
     GZ1OZ0(I)= LOG((ZA(I)+ZNTstoch(I))/ZNTstoch(I))
     GZ1OZt(I)= LOG((ZA(I)+ZNTstoch(I))/z_t(i))
-    GZ2OZ0(I)= LOG((2.0+ZNTstoch(I))/ZNTstoch(I))                                        
+    GZ2OZ0(I)= LOG((2.0+ZNTstoch(I))/ZNTstoch(I))
     GZ2OZt(I)= LOG((2.0+ZNTstoch(I))/z_t(i))
-    GZ10OZ0(I)=LOG((10.+ZNTstoch(I))/ZNTstoch(I)) 
+    GZ10OZ0(I)=LOG((10.+ZNTstoch(I))/ZNTstoch(I))
     GZ10OZt(I)=LOG((10.+ZNTstoch(I))/z_t(i))
 
-    !--------------------------------------------------------------------      
+    !--------------------------------------------------------------------
     !--- DIAGNOSE BASIC PARAMETERS FOR THE APPROPRIATE STABILITY CLASS:
-    !                                                                                
+    !
     !    THE STABILITY CLASSES ARE DETERMINED BY BR (BULK RICHARDSON NO.).
-    !                                                                                
-    !    CRITERIA FOR THE CLASSES ARE AS FOLLOWS:                                   
-    !                                                                                
-    !        1. BR .GE. 0.2;                                                         
-    !               REPRESENTS NIGHTTIME STABLE CONDITIONS (REGIME=1),               
-    !                                                                                
-    !        2. BR .LT. 0.2 .AND. BR .GT. 0.0;                                       
-    !               REPRESENTS DAMPED MECHANICAL TURBULENT CONDITIONS                
-    !               (REGIME=2),                                                      
-    !                                                                                
-    !        3. BR .EQ. 0.0                                                          
-    !               REPRESENTS FORCED CONVECTION CONDITIONS (REGIME=3),              
-    !                                                                                
-    !        4. BR .LT. 0.0                                                          
-    !               REPRESENTS FREE CONVECTION CONDITIONS (REGIME=4).                
-    !                                                                                
+    !
+    !    CRITERIA FOR THE CLASSES ARE AS FOLLOWS:
+    !
+    !        1. BR .GE. 0.2;
+    !               REPRESENTS NIGHTTIME STABLE CONDITIONS (REGIME=1),
+    !
+    !        2. BR .LT. 0.2 .AND. BR .GT. 0.0;
+    !               REPRESENTS DAMPED MECHANICAL TURBULENT CONDITIONS
+    !               (REGIME=2),
+    !
+    !        3. BR .EQ. 0.0
+    !               REPRESENTS FORCED CONVECTION CONDITIONS (REGIME=3),
+    !
+    !        4. BR .LT. 0.0
+    !               REPRESENTS FREE CONVECTION CONDITIONS (REGIME=4).
+    !
     !--------------------------------------------------------------------
     IF (BR(I) .GT. 0.0) THEN
-       IF (BR(I) .GT. 0.2) THEN        
-          !---CLASS 1; STABLE (NIGHTTIME) CONDITIONS:                                    
+       IF (BR(I) .GT. 0.2) THEN
+          !---CLASS 1; STABLE (NIGHTTIME) CONDITIONS:
           REGIME(I)=1.
        ELSE
           !---CLASS 2; DAMPED MECHANICAL TURBULENCE:
@@ -809,10 +810,10 @@ CONTAINS
        zolz0 = zol(I)*ZNTstoch(I)/ZA(I)          ! z0/L
        zolza = zol(I)*(za(I)+ZNTstoch(I))/za(I)  ! (z+z0/L
        zol10 = zol(I)*(10.+ZNTstoch(I))/za(I)    ! (10+z0)/L
-       zol2  = zol(I)*(2.+ZNTstoch(I))/za(I)     ! (2+z0)/L 
+       zol2  = zol(I)*(2.+ZNTstoch(I))/za(I)     ! (2+z0)/L
 
        !COMPUTE PSIM and PSIH
-       IF ((XLAND(I)-1.5).GE.0) THEN                                            
+       IF ((XLAND(I)-1.5).GE.0) THEN
           ! WATER
           !CALL PSI_Suselj_Sood_2010(PSIM(I),PSIH(I),ZOL(I))
           !CALL PSI_Beljaars_Holtslag_1991(PSIM(I),PSIH(I),ZOL(I))
@@ -826,7 +827,7 @@ CONTAINS
           psih10(I)=psih_stable(zol10,psi_opt)-psih_stable(zolz0,psi_opt)
           psih2(I)=psih_stable(zol2,psi_opt)-psih_stable(zolz0,psi_opt)
        ELSE
-          ! LAND  
+          ! LAND
           !CALL PSI_Beljaars_Holtslag_1991(PSIM(I),PSIH(I),ZOL(I))
           !CALL PSI_Businger_1971(PSIM(I),PSIH(I),ZOL(I))
           !CALL PSI_Zilitinkevich_Esau_2007(PSIM(I),PSIH(I),ZOL(I))
@@ -848,9 +849,9 @@ CONTAINS
        ! 1.0 over Monin-Obukhov length
        RMOL(I)= ZOL(I)/ZA(I)
 
-    ELSEIF(BR(I) .EQ. 0.) THEN                  
-       !=========================================================  
-       !-----CLASS 3; FORCED CONVECTION/NEUTRAL:                                                
+    ELSEIF(BR(I) .EQ. 0.) THEN
+       !=========================================================
+       !-----CLASS 3; FORCED CONVECTION/NEUTRAL:
        !=========================================================
        REGIME(I)=3.
 
@@ -870,7 +871,7 @@ CONTAINS
 
     ELSEIF(BR(I) .LT. 0.)THEN
        !==========================================================
-       !-----CLASS 4; FREE CONVECTION:                                                  
+       !-----CLASS 4; FREE CONVECTION:
        !==========================================================
        REGIME(I)=4.
 
@@ -897,7 +898,7 @@ CONTAINS
        zol2  = zol(I)*(2.+ZNTstoch(I))/za(I)      ! (2+z0)/L
 
        !COMPUTE PSIM and PSIH
-       IF ((XLAND(I)-1.5).GE.0) THEN                                            
+       IF ((XLAND(I)-1.5).GE.0) THEN
           ! WATER
           !CALL PSI_Suselj_Sood_2010(PSIM(I),PSIH(I),ZOL(I))
           !CALL PSI_Hogstrom_1996(PSIM(I),PSIH(I),ZOL(I), z_t(I), ZNTstoch(I), ZA(I))
@@ -909,8 +910,8 @@ CONTAINS
           psim10(I)=psim_unstable(zol10,psi_opt)-psim_unstable(zolz0,psi_opt)
           psih10(I)=psih_unstable(zol10,psi_opt)-psih_unstable(zolz0,psi_opt)
           psih2(I)=psih_unstable(zol2,psi_opt)-psih_unstable(zolz0,psi_opt)
-       ELSE           
-          ! LAND  
+       ELSE
+          ! LAND
           !CALL PSI_Hogstrom_1996(PSIM(I),PSIH(I),ZOL(I), z_t(I), ZNTstoch(I), ZA(I))
           !CALL PSI_Businger_1971(PSIM(I),PSIH(I),ZOL(I))
           !CALL PSI_DyerHicks(PSIM(I),PSIH(I),ZOL(I),z_t(I),ZNTstoch(I),ZA(I))
@@ -920,7 +921,7 @@ CONTAINS
           psim10(I)=psim_unstable(zol10,psi_opt)-psim_unstable(zolz0,psi_opt)
           psih10(I)=psih_unstable(zol10,psi_opt)-psih_unstable(zolz0,psi_opt)
           psih2(I)=psih_unstable(zol2,psi_opt)-psih_unstable(zolz0,psi_opt)
-       ENDIF              
+       ENDIF
 
        !PSIM10(I)=10./ZA(I)*PSIM(I)
        !PSIH2(I)=2./ZA(I)*PSIH(I)
@@ -934,22 +935,22 @@ CONTAINS
        PSIM10(I)=MIN(PSIM10(I),0.9*GZ10OZ0(I))
        PSIH10(I)=MIN(PSIH10(I),0.9*GZ10OZt(I))
 
-       RMOL(I) = ZOL(I)/ZA(I)  
+       RMOL(I) = ZOL(I)/ZA(I)
 
     ENDIF
 
     !------------------------------------------------------------
-    !-----COMPUTE THE FRICTIONAL VELOCITY:                                           
+    !-----COMPUTE THE FRICTIONAL VELOCITY:
     !------------------------------------------------------------
     !     ZA(1982) EQS(2.60),(2.61).
     PSIX=GZ1OZ0(I)-PSIM(I)
     PSIX10=GZ10OZ0(I)-PSIM10(I)
-    ! TO PREVENT OSCILLATIONS AVERAGE WITH OLD VALUE 
+    ! TO PREVENT OSCILLATIONS AVERAGE WITH OLD VALUE
     OLDUST = UST(I)
-    UST(I)=0.5*UST(I)+0.5*KARMAN*WSPD(I)/PSIX 
+    UST(I)=0.5*UST(I)+0.5*KARMAN*WSPD(I)/PSIX
     !NON-AVERAGED: UST(I)=KARMAN*WSPD(I)/PSIX
-     
-    ! Compute u* without vconv for use in HFX calc when isftcflx > 0           
+
+    ! Compute u* without vconv for use in HFX calc when isftcflx > 0
     WSPDI(I)=MAX(SQRT(U1D(I)*U1D(I)+V1D(I)*V1D(I)), wmin)
     IF ( PRESENT(USTM) ) THEN
        USTM(I)=0.5*USTM(I)+0.5*KARMAN*WSPDI(I)/PSIX
@@ -1019,22 +1020,22 @@ CONTAINS
 
     PSIT =MAX(GZ1OZt(I)-PSIH(I), 1.0)
     PSIT2=MAX(GZ2OZt(I)-PSIH2(I),1.0)
-  
+
     PSIQ=MAX(LOG((ZA(I)+z_q(i))/z_q(I))-PSIH(I) ,1.0)
     PSIQ2=MAX(LOG((2.0+z_q(i))/z_q(I))-PSIH2(I) ,1.0)
     PSIQ10=MAX(LOG((10.0+z_q(i))/z_q(I))-PSIH10(I) ,1.0)
 
-    IF (ISFFLX .LT. 1) THEN                            
+    IF (ISFFLX .LT. 1) THEN
 
-       QFX(i)  = 0.                                                              
-       HFX(i)  = 0.    
-       FLHC(I) = 0.                                                             
-       FLQC(I) = 0.                                                             
-       LH(I)   = 0.                                                             
-       CHS(I)  = 0.                                                             
-       CH(I)   = 0.                                                             
-       CHS2(i) = 0.                                                              
-       CQS2(i) = 0.                                                              
+       QFX(i)  = 0.
+       HFX(i)  = 0.
+       FLHC(I) = 0.
+       FLQC(I) = 0.
+       LH(I)   = 0.
+       CHS(I)  = 0.
+       CH(I)   = 0.
+       CHS2(i) = 0.
+       CQS2(i) = 0.
        IF(PRESENT(ck)  .and. PRESENT(cd) .and. &
          &PRESENT(cka) .and. PRESENT(cda)) THEN
            Ck(I) = 0.
@@ -1055,24 +1056,24 @@ CONTAINS
       ! COMPUTE SURFACE MOISTURE FLUX:
       !----------------------------------
       QFX(I)=FLQC(I)*(QSFCMR(I)-QV1D(I))
-      !JOE: QFX(I)=MAX(QFX(I),0.)   !originally did not allow neg QFX           
+      !JOE: QFX(I)=MAX(QFX(I),0.)   !originally did not allow neg QFX
       QFX(I)=MAX(QFX(I),-0.02)      !allows small neg QFX, like MYJ
       LH(I)=XLV*QFX(I)
 
       !----------------------------------
       ! COMPUTE SURFACE HEAT FLUX:
       !----------------------------------
-      IF(XLAND(I)-1.5.GT.0.)THEN      !WATER                                           
-         HFX(I)=FLHC(I)*(THGB(I)-TH1D(I))                                
+      IF(XLAND(I)-1.5.GT.0.)THEN      !WATER
+         HFX(I)=FLHC(I)*(THGB(I)-TH1D(I))
          IF ( PRESENT(ISFTCFLX) ) THEN
             IF ( ISFTCFLX.NE.0 ) THEN
                ! AHW: add dissipative heating term
                HFX(I)=HFX(I)+RHO1D(I)*USTM(I)*USTM(I)*WSPDI(I)
             ENDIF
          ENDIF
-      ELSEIF(XLAND(I)-1.5.LT.0.)THEN  !LAND                               
-         HFX(I)=FLHC(I)*(THGB(I)-TH1D(I))                                
-         HFX(I)=MAX(HFX(I),-250.)                                       
+      ELSEIF(XLAND(I)-1.5.LT.0.)THEN  !LAND
+         HFX(I)=FLHC(I)*(THGB(I)-TH1D(I))
+         HFX(I)=MAX(HFX(I),-250.)
       ENDIF
 
       !CHS(I)=UST(I)*KARMAN/(ALOG(KARMAN*UST(I)*ZA(I) &
@@ -1080,7 +1081,7 @@ CONTAINS
 
       CHS(I)=UST(I)*KARMAN/PSIT
 
-      ! The exchange coefficient for cloud water is assumed to be the 
+      ! The exchange coefficient for cloud water is assumed to be the
       ! same as that for heat. CH is multiplied by WSPD.
 
       !ch(i)=chs(i)
@@ -1134,7 +1135,7 @@ CONTAINS
    !COMPUTE 2m T, TH, AND Q
    !THESE WILL BE OVERWRITTEN FOR LAND POINTS IN THE LSM
    !-----------------------------------------------------
-   DTG=TH1D(I)-THGB(I) 
+   DTG=TH1D(I)-THGB(I)
    TH2(I)=THGB(I)+DTG*PSIT2/PSIT
    !***  BE CERTAIN THAT THE 2-M THETA IS BRACKETED BY
    !***  THE VALUES AT THE SURFACE AND LOWEST MODEL LEVEL.
@@ -1205,18 +1206,18 @@ CONTAINS
  ENDDO !end i-loop
 
 END SUBROUTINE SFCLAY1D_mynn
-!-------------------------------------------------------------------          
+!-------------------------------------------------------------------
    SUBROUTINE zilitinkevich_1995(Z_0,Zt,Zq,restar,ustar,KARMAN,&
        & landsea,IZ0TLND2,spp_pbl,rstoch)
 
        ! This subroutine returns the thermal and moisture roughness lengths
        ! from Zilitinkevich (1995) and Zilitinkevich et al. (2001) over
-       ! land and water, respectively. 
+       ! land and water, respectively.
        !
        ! MODS:
        ! 20120705 : added IZ0TLND option. Note: This option was designed
        !            to work with the Noah LSM and may be specific for that
-       !            LSM only. Tests with RUC LSM showed no improvements. 
+       !            LSM only. Tests with RUC LSM showed no improvements.
 
        IMPLICIT NONE
        REAL, INTENT(IN) :: Z_0,restar,ustar,KARMAN,landsea
@@ -1265,7 +1266,7 @@ END SUBROUTINE SFCLAY1D_mynn
           Zq = MIN( Zq, 0.75*Z_0)
 
 ! stochastically perturb thermal and moisture roughness length.
-! currently set to half the amplitude: 
+! currently set to half the amplitude:
           if (spp_pbl==1) then
              Zt = Zt + Zt * 0.5 * rstoch
              Zt = MAX(Zt, 0.0001)
@@ -1273,7 +1274,7 @@ END SUBROUTINE SFCLAY1D_mynn
           endif
 
        ENDIF
-                   
+
        return
 
    END SUBROUTINE zilitinkevich_1995
@@ -1281,7 +1282,7 @@ END SUBROUTINE SFCLAY1D_mynn
    SUBROUTINE davis_etal_2008(Z_0,ustar)
 
     !a.k.a. : Donelan et al. (2004)
-    !This formulation for roughness length was designed to match 
+    !This formulation for roughness length was designed to match
     !the labratory experiments of Donelan et al. (2004).
     !This is an update version from Davis et al. 2008, which
     !corrects a small-bias in Z_0 (AHW real-time 2012).
@@ -1303,14 +1304,14 @@ END SUBROUTINE SFCLAY1D_mynn
 
        Z_0 = MAX( Z_0, 1.27e-7)  !These max/mins were suggested by
        Z_0 = MIN( Z_0, 2.85e-3)  !Davis et al. (2008)
-                   
+
        return
 
    END SUBROUTINE davis_etal_2008
 !--------------------------------------------------------------------
    SUBROUTINE Taylor_Yelland_2001(Z_0,ustar,wsp10)
 
-    !This formulation for roughness length was designed account for 
+    !This formulation for roughness length was designed account for
     !wave steepness.
 
        IMPLICIT NONE
@@ -1329,23 +1330,23 @@ END SUBROUTINE SFCLAY1D_mynn
        Z_0 = 1200.*hs*(hs/Lp)**4.5
        Z_0 = MAX( Z_0, 1.27e-7)  !These max/mins were suggested by
        Z_0 = MIN( Z_0, 2.85e-3)  !Davis et al. (2008)
-                   
+
        return
 
    END SUBROUTINE Taylor_Yelland_2001
 !--------------------------------------------------------------------
    SUBROUTINE charnock_1955(Z_0,ustar,wsp10,visc,zu)
- 
+
     !This version of Charnock's relation employs a varying
     !Charnock parameter, similar to COARE3.0 [Fairall et al. (2003)].
-    !The Charnock parameter CZC is varied from .011 to .018 
-    !between 10-m wsp = 10 and 18. 
+    !The Charnock parameter CZC is varied from .011 to .018
+    !between 10-m wsp = 10 and 18.
 
        IMPLICIT NONE
        REAL, INTENT(IN)  :: ustar, visc, wsp10, zu
        REAL, INTENT(OUT) :: Z_0
        REAL, PARAMETER   :: G=9.81, CZO2=0.011
-       REAL              :: CZC    !variable charnock "constant"   
+       REAL              :: CZC    !variable charnock "constant"
        REAL              :: wsp10m ! logarithmically calculated 10 m
 
        wsp10m = wsp10*log(10./1e-4)/log(zu/1e-4)
@@ -1417,7 +1418,7 @@ END SUBROUTINE SFCLAY1D_mynn
           Zq = Z_0/(e**2.)      !taken from Garratt (1980,1992)
           Zt = Zq
        ENDIF
-                   
+
        return
 
     END SUBROUTINE garratt_1992
@@ -1501,18 +1502,18 @@ END SUBROUTINE SFCLAY1D_mynn
 !--------------------------------------------------------------------
     SUBROUTINE Yang_2008(Z_0,Zt,Zq,ustar,tstar,qst,Ren,visc,landsea)
 
-    !This is a modified version of Yang et al (2002 QJRMS, 2008 JAMC) 
-    !and Chen et al (2010, J of Hydromet). Although it was originally 
-    !designed for arid regions with bare soil, it is modified 
+    !This is a modified version of Yang et al (2002 QJRMS, 2008 JAMC)
+    !and Chen et al (2010, J of Hydromet). Although it was originally
+    !designed for arid regions with bare soil, it is modified
     !here to perform over a broader spectrum of vegetation.
     !
-    !The original formulation relates the thermal roughness length (Zt) 
+    !The original formulation relates the thermal roughness length (Zt)
     !to u* and T*:
-    !  
+    !
     ! Zt = ht * EXP(-beta*(ustar**0.5)*(ABS(tstar)**0.25))
     !
-    !where ht = Renc*visc/ustar and the critical Reynolds number 
-    !(Renc) = 70. Beta was originally = 10 (2002 paper) but was revised 
+    !where ht = Renc*visc/ustar and the critical Reynolds number
+    !(Renc) = 70. Beta was originally = 10 (2002 paper) but was revised
     !to 7.2 (in 2008 paper). Their form typically varies the
     !ratio Z0/Zt by a few orders of magnitude (1-1E4).
     !
@@ -1558,7 +1559,7 @@ END SUBROUTINE SFCLAY1D_mynn
 !--------------------------------------------------------------------
     SUBROUTINE Andreas_2002(Z_0,bvisc,ustar,Zt,Zq)
 
-    ! This is taken from Andreas (2002; J. of Hydromet) and 
+    ! This is taken from Andreas (2002; J. of Hydromet) and
     ! Andreas et al. (2005; BLM).
     !
     ! This should only be used over snow/ice!
@@ -1576,15 +1577,15 @@ END SUBROUTINE SFCLAY1D_mynn
                            bq1_s=0.0,   bq1_t=-0.628, bq1_r=-0.512, &
                            bq2_s=0.0,   bq2_t=0.0,    bq2_r=-0.180
 
-      !Calculate zo for snow (Andreas et al. 2005, BLM)                                                                     
+      !Calculate zo for snow (Andreas et al. 2005, BLM)
        zntsno = 0.135*bvisc/ustar + &
                (0.035*(ustar*ustar)/9.8) * &
-               (5.*exp(-1.*(((ustar - 0.18)/0.1)*((ustar - 0.18)/0.1))) + 1.)                                                
+               (5.*exp(-1.*(((ustar - 0.18)/0.1)*((ustar - 0.18)/0.1))) + 1.)
        Ren2 = ustar*zntsno/bvisc
 
        ! Make sure that Re is not outside of the range of validity
        ! for using their equations
-       IF (Ren2 .gt. 1000.) Ren2 = 1000. 
+       IF (Ren2 .gt. 1000.) Ren2 = 1000.
 
        IF (Ren2 .le. 0.135) then
 
@@ -1617,14 +1618,14 @@ END SUBROUTINE SFCLAY1D_mynn
        REAL, INTENT(OUT) :: psi_m, psi_h
        REAL  :: x, x0, y, y0, zmL, zhL
 
-       zmL = Z_0*zL/Za  
+       zmL = Z_0*zL/Za
        zhL = Zt*zL/Za
 
        IF (zL .gt. 0.) THEN  !STABLE (not well tested - seem large)
 
           psi_m = -5.3*(zL - zmL)
           psi_h = -8.0*(zL - zhL)
- 
+
        ELSE                 !UNSTABLE
 
           x = (1.-19.0*zL)**0.25
@@ -1638,7 +1639,7 @@ END SUBROUTINE SFCLAY1D_mynn
           psi_h = 2.*LOG((1.+y)/(1.+y0))
 
        ENDIF
-                   
+
        return
 
     END SUBROUTINE PSI_Hogstrom_1996
@@ -1662,7 +1663,7 @@ END SUBROUTINE SFCLAY1D_mynn
 
           psi_m = -5.0*(zL - zmL)
           psi_h = -5.0*(zL - zhL)
- 
+
        ELSE                 !UNSTABLE
 
           x = (1.-16.*zL)**0.25
@@ -1672,12 +1673,12 @@ END SUBROUTINE SFCLAY1D_mynn
           y0= (1.-16.*zhL)**0.5
 
           psi_m = 2.*LOG((1.+x)/(1.+x0)) + &
-                    &LOG((1.+x**2.)/(1.+x0**2.)) - & 
+                    &LOG((1.+x**2.)/(1.+x0**2.)) - &
                     &2.0*ATAN(x) + 2.0*ATAN(x0)
           psi_h = 2.*LOG((1.+y)/(1.+y0))
 
        ENDIF
-                   
+
        return
 
     END SUBROUTINE PSI_DyerHicks
@@ -1700,7 +1701,7 @@ END SUBROUTINE SFCLAY1D_mynn
           WRITE(*,*)"        be used in the stable regime!"
           psi_m = 0.
           psi_h = 0.
- 
+
        ELSE                 !STABLE
 
           psi_m = -(a*zL + b*(zL -(c/d))*exp(-d*zL) + (b*c/d))
@@ -1708,7 +1709,7 @@ END SUBROUTINE SFCLAY1D_mynn
                   b*(zL - (c/d))*exp(-d*zL) + (b*c/d) -1.)
 
        ENDIF
-                   
+
        return
 
     END SUBROUTINE PSI_Beljaars_Holtslag_1991
@@ -1732,14 +1733,14 @@ END SUBROUTINE SFCLAY1D_mynn
           WRITE(*,*)"        be used in the stable regime!"
           psi_m = 0.
           psi_h = 0.
- 
+
        ELSE                 !STABLE
 
           psi_m = -Cm*(zL**(5./6.))
           psi_h = -Ct*(zL**(4./5.))
 
        ENDIF
-                   
+
        return
 
     END SUBROUTINE PSI_Zilitinkevich_Esau_2007
@@ -1771,7 +1772,7 @@ END SUBROUTINE SFCLAY1D_mynn
           psi_h = -(4.7/0.74)*zL
 
        ENDIF
-                   
+
        return
 
     END SUBROUTINE PSI_Businger_1971
@@ -1797,14 +1798,14 @@ END SUBROUTINE SFCLAY1D_mynn
           !THEIR EQ FOR PSI_H CRASHES THE MODEL AND DOES NOT MATCH
           !THEIR FIG 1. THIS EQ (BELOW) MATCHES THEIR FIG 1 BETTER:
           psi_h = -(zL*Ric/((Rfc**2.)*5.) + 7.09*(zL**1.1091))
- 
+
        ELSE                 !UNSTABLE
 
           psi_m = 0.9904*LOG(1. - 14.264*zL)
           psi_h = 1.0103*LOG(1. - 16.3066*zL)
 
        ENDIF
-                   
+
        return
 
     END SUBROUTINE PSI_Suselj_Sood_2010
@@ -1846,7 +1847,7 @@ END SUBROUTINE SFCLAY1D_mynn
                           &bw21=-0.669, bw22=-3.282
        REAL, PARAMETER  :: as11=0.7529, as21=14.94, bs11=0.1569,&
                           &bs21=-0.3091, bs22=-1.303
-          
+
        !set limits according to Li et al (2010), p 157.
        zaz02=zaz0
        IF (zaz0 .lt. 100.0) zaz02=100.
@@ -1891,8 +1892,8 @@ END SUBROUTINE SFCLAY1D_mynn
 !-------------------------------------------------------------------
       REAL function zolri(ri,za,z0,zt,zol1,psi_opt)
 
-      ! This iterative algorithm is a two-point secant method taken from the revised 
-      ! surface layer scheme in WRF-ARW, written by Pedro Jimenez and Jimy Dudhia and 
+      ! This iterative algorithm is a two-point secant method taken from the revised
+      ! surface layer scheme in WRF-ARW, written by Pedro Jimenez and Jimy Dudhia and
       ! summarized in Jimenez et al. (2012, MWR). This function was adapted
       ! to input the thermal roughness length, zt, (as well as z0) and use initial
       ! estimate of z/L.
@@ -1915,7 +1916,7 @@ END SUBROUTINE SFCLAY1D_mynn
       n=0
       fx1=zolri2(x1,ri,za,z0,zt,psi_opt)
       fx2=zolri2(x2,ri,za,z0,zt,psi_opt)
-        
+
       Do While (abs(x1 - x2) > 0.01 .and. n < nmax)
         if(abs(fx2) .lt. abs(fx1))then
           x1=x1-fx1/(fx2-fx1)*(x2-x1)
@@ -1960,11 +1961,11 @@ END SUBROUTINE SFCLAY1D_mynn
       if(zol2*ri2 .lt. 0.) THEN
          !print*,"WRONG QUADRANTS: z/L=",zol2," ri=",ri2
          zol2=0.
-      endif 
+      endif
 
       zol20=zol2*z0/za ! z0/L
       zol3=zol2+zol20  ! (z+z0)/L
-      zolt=zol2*zt/za  ! zt/L 
+      zolt=zol2*zt/za  ! zt/L
 
       if (ri2.lt.0) then
          psit2=MAX(log((za+z0)/zt)-(psih_unstable(zol3,psi_opt)-psih_unstable(zolt,psi_opt)), 1.0)
@@ -2086,7 +2087,7 @@ END SUBROUTINE SFCLAY1D_mynn
 ! ... Full equations for the integrated similarity functions ...
 ! ==================================================================
    REAL function psim_stable_full(zolf)
-        REAL :: zolf   
+        REAL :: zolf
 
         psim_stable_full=-6.1*log(zolf+(1+zolf**2.5)**(1./2.5))
 
@@ -2192,7 +2193,7 @@ END SUBROUTINE SFCLAY1D_mynn
 
 !=================================================================
 ! These functions use the look-up table functions when |z/L| <= 10
-! but default to the full equations when |z/L| > 10.  
+! but default to the full equations when |z/L| > 10.
 !=================================================================
    REAL function psim_stable(zolf,psi_opt)
         integer :: nzol,psi_opt
@@ -2272,4 +2273,3 @@ END SUBROUTINE SFCLAY1D_mynn
 !========================================================================
 
 END MODULE module_sf_mynn
-
