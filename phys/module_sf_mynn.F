@@ -617,8 +617,6 @@ CONTAINS
 
  DO I=its,ite
 
-    PRINT *, I
-
     !COMPUTE KINEMATIC VISCOSITY (m2/s) Andreas (1989) CRREL Rep. 89-11
     !valid between -173 and 277 degrees C.
     VISC=1.326e-5*(1. + 6.542e-3*TC1D(I) + 8.301e-6*TC1D(I)*TC1D(I) &
@@ -635,7 +633,6 @@ CONTAINS
              IF (COARE_OPT .EQ. 3.0) THEN
                 !COARE 3.0 (MISLEADING SUBROUTINE NAME)
                 CALL charnock_1955(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
-                PRINT *, I
              ELSE
                 !COARE 3.5
                 CALL edson_etal_2013(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
