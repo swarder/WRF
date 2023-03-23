@@ -632,6 +632,7 @@ CONTAINS
           IF ( ISFTCFLX .EQ. 0 ) THEN
              IF (COARE_OPT .EQ. 3.0) THEN
                 !COARE 3.0 (MISLEADING SUBROUTINE NAME)
+                print*, "Calling Charnock"
                 CALL charnock_1955(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
              ELSE
                 !COARE 3.5

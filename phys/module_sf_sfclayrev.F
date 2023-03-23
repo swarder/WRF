@@ -711,7 +711,6 @@ CONTAINS
 
 ! V3.7: using Fairall 2003 to compute z0q and z0t over water:
 !       adapted from module_sf_mynn.F
-        print*, I
         IF ( (XLAND(I)-1.5).GE.0. ) THEN
               VISC=(1.32+0.009*(SCR3(I)-273.15))*1.E-5
               RESTAR=UST(I)*ZNT(I)/VISC
