@@ -616,7 +616,7 @@ CONTAINS
 !--------------------------------------------------------------------
 
  DO I=its,ite
-    print*, I
+    print*, I, J
     !COMPUTE KINEMATIC VISCOSITY (m2/s) Andreas (1989) CRREL Rep. 89-11
     !valid between -173 and 277 degrees C.
     VISC=1.326e-5*(1. + 6.542e-3*TC1D(I) + 8.301e-6*TC1D(I)*TC1D(I) &
