@@ -493,6 +493,7 @@ CONTAINS
                   PSIQ,PSIQ2,PSIQ10,DZDT
       REAL    ::  FLUXC,VSGD
       REAL    ::  restar,VISC,DQG,OLDUST,OLDTST
+      REAL    ::  FDIST
 
 !-------------------------------------------------------------------
 
@@ -616,7 +617,7 @@ CONTAINS
 !--------------------------------------------------------------------
 
  DO I=its,ite
-    print*, I, its, ite, J, jts, jte
+    !print*, I, its, ite, J, jts, jte
     !COMPUTE KINEMATIC VISCOSITY (m2/s) Andreas (1989) CRREL Rep. 89-11
     !valid between -173 and 277 degrees C.
     VISC=1.326e-5*(1. + 6.542e-3*TC1D(I) + 8.301e-6*TC1D(I)*TC1D(I) &
@@ -633,8 +634,13 @@ CONTAINS
              IF (COARE_OPT .EQ. 3.0) THEN
                 !COARE 3.0 (MISLEADING SUBROUTINE NAME)
                 print*, "Calling Charnock"
-                print*, ZNT(i)
+                !print*, ZNT(i)
                 CALL charnock_1955(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
+                FDIST=(I-53)**2 + (J-51)**2
+                IF (ite .EQ. 541) .AND. (FDIST .LE. 100) THEN
+                    print*, "Adding roughness", I, J
+                    ZNT(i)=ZNT(i)+0.1
+                ENDIF
              ELSE
                 !COARE 3.5
                 CALL edson_etal_2013(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
