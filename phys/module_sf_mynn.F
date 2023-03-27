@@ -637,7 +637,8 @@ CONTAINS
                 !print*, ZNT(i)
                 CALL charnock_1955(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
                 FDIST=(I-53)**2 + (J-51)**2
-                IF ((ite .EQ. 541) .AND. (FDIST .LE. 100)) THEN
+                print*, I, ite, J, FDIST
+                IF ((ite .EQ. 90) .AND. (FDIST .LE. 100)) THEN
                     print*, "Adding roughness", I, J
                     ZNT(i)=ZNT(i)+0.1
                 ENDIF
