@@ -633,11 +633,11 @@ CONTAINS
           IF ( ISFTCFLX .EQ. 0 ) THEN
              IF (COARE_OPT .EQ. 3.0) THEN
                 !COARE 3.0 (MISLEADING SUBROUTINE NAME)
-                print*, "Calling Charnock"
+                !print*, "Calling Charnock"
                 !print*, ZNT(i)
                 CALL charnock_1955(ZNT(i),UST(i),WSPD(i),visc,ZA(I))
                 FDIST=(I-80)**2 + (J-78)**2
-                print*, I, ite, J, FDIST
+                !print*, I, ite, J, FDIST
                 IF ((ite .EQ. 144.0) .AND. (FDIST .LE. 100.0)) THEN
                     print*, "Adding roughness", I, J
                     ZNT(i)=ZNT(i)+0.1
